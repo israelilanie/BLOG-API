@@ -1,0 +1,12 @@
+package com.example.blogapi.repository;
+
+import com.example.blogapi.model.Comment;
+import com.example.blogapi.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface UserRepo extends JpaRepository<User,Long> {
+    Optional<User> findByEmail(String email);
+    Optional<User> findByUsername(String username);
+}
