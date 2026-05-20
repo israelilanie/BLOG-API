@@ -1,8 +1,10 @@
 package com.example.blogapi.controller;
 
+import com.example.blogapi.model.User;
 import com.example.blogapi.service.CommentLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,16 +14,16 @@ public class CommentLikeController {
 
     private final CommentLikeService commentLikeService;
 
-    @PostMapping("/{userId}/{commentId}")
+    @PostMapping("/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void like(@PathVariable long userId, @PathVariable long commentId){
-        commentLikeService.likePost(userId,commentId);
+    public void like(@AuthenticationPrincipal User user, @PathVariable long commentId){
+        commentLikeService.likePost(user,commentId);
     }
 
-    @DeleteMapping("/{userId}/{commentId}")
+    @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
-    public void unLike(@PathVariable long userId, @PathVariable long commentId){
-        commentLikeService.unLikePost(userId,commentId);
+    public void unLike(@AuthenticationPrincipal User user, @PathVariable long commentId){
+        commentLikeService.unLikePost(user,commentId);
     }
 
     @GetMapping("/{commentId}")

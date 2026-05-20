@@ -16,8 +16,8 @@ public class CommentLikeService {
     private final CommentRepo commentRepo;
     private final CommentLikeRepository commentLikeRepository;
 
-    public void likePost(Long userId, Long commentId){
-        User user = userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("USER", userId));
+    public void likePost(User currentUser, Long commentId){
+        User user = userRepo.findById(currentUser.getId()).orElseThrow(()->new ResourceNotFoundException("USER", currentUser.getId()));
         Comment comment = commentRepo.findById(commentId).orElseThrow(()->new ResourceNotFoundException("COMMENT",commentId));
         boolean exists = commentLikeRepository.existsByUserAndComment(user,comment);
 
@@ -31,8 +31,8 @@ public class CommentLikeService {
         commentLikeRepository.save(like);
     }
 
-    public void unLikePost(Long userId, Long commentId){
-        User user = userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("USER", userId));
+    public void unLikePost(User currentUser, Long commentId){
+        User user = userRepo.findById(currentUser.getId()).orElseThrow(()->new ResourceNotFoundException("USER", currentUser.getId()));
         Comment comment = commentRepo.findById(commentId).orElseThrow(()->new ResourceNotFoundException("COMMENT",commentId));
         boolean exists = commentLikeRepository.existsByUserAndComment(user,comment);
         commentLikeRepository.deleteByUserAndComment(user,comment);
