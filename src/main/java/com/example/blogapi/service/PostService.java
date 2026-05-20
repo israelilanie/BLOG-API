@@ -30,6 +30,7 @@ public class PostService {
     private final UserRepo userRepo;
 
     public PostResponseDTO createPost(User currentUser, PostRequestDTO postRequestDTO){
+
         User user = userRepo.findById(currentUser.getId()).orElseThrow(()-> new ResourceNotFoundException("User", currentUser.getId()));
         Post post = postMapper.post(postRequestDTO);
         post.setAuthor(user);
