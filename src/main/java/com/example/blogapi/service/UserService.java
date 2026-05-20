@@ -58,7 +58,7 @@ public class UserService {
 
         logger.info("User successfully registered with id {}", user1.getId());
 
-        //emailService.sendWelcomeEmail(user.getEmail(), user.getUsername());
+        emailService.sendWelcomeEmail(user.getEmail(), user.getUsername());
         return userMapper.userResponseDTO(user1);
     }
 

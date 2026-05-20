@@ -20,8 +20,8 @@ public class PostLikeService {
     private final PostRepo postRepo;
     private final PostLikeRepository postLikeRepository;
 
-    public void likePost(Long userId, Long postId){
-        User user = userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("USER", userId));
+    public void likePost(User currentUser, Long postId){
+        User user = userRepo.findById(currentUser.getId()).orElseThrow(()->new ResourceNotFoundException("USER", currentUser.getId()));
         Post post = postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("POST", postId));
 
         boolean exists = postLikeRepository.existsByUserAndPost(user,post);
@@ -36,8 +36,8 @@ public class PostLikeService {
         postLikeRepository.save(postLike);
     }
 
-    public void unLikePost(Long userId, Long postId){
-        User user = userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("USER", userId));
+    public void unLikePost(User currentUser, Long postId){
+        User user = userRepo.findById(currentUser.getId()).orElseThrow(()->new ResourceNotFoundException("USER", currentUser.getId()));
         Post post = postRepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("POST", postId));
 
         boolean exists = postLikeRepository.existsByUserAndPost(user,post);
