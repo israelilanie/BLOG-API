@@ -1,11 +1,12 @@
-# Use official Java 21 runtime (matches your setup)
-FROM eclipse-temurin:21
+FROM maven:3.9.16-eclipse-temurin-21 AS build
 
-# Set working directory inside container
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy the built jar file into the container
-COPY target/blog-api-0.0.1-SNAPSHOT.jar app.jar
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
+COPY --from=build /app/target/blog-api-0.0.1-SNAPSHOT.jar app.jar
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE 8080
+ENTRYPOINT ["sh", "-c", "java -jar app.jar"]
