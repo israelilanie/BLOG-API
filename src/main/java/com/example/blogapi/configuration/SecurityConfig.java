@@ -40,6 +40,7 @@ public class SecurityConfig {
                                 .requestMatchers("/actuator/**").hasRole("ADMIN")
                                 .requestMatchers("/users/register",
                                         "/users/login",
+                                        "/v3/api-docs",
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html").permitAll()
