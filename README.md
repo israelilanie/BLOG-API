@@ -1,241 +1,211 @@
-**🧠 Blog API — Spring Boot Backend**
+# Blog API (Spring Boot)
 
-A production-ready REST API for a blog system built with Spring Boot, featuring authentication, role-based access control, pagination, comments, likes, and deployed on Render with PostgreSQL. 
+Production-oriented REST API for a blog platform, built to demonstrate backend fundamentals recruiters look for: authentication, authorization, layered architecture, validation, error handling, persistence, and deployment readiness.
 
- 
+---
 
-**🚀 Live Deployment**
+## Live Deployment
 
+The API is deployed and publicly accessible at:
 
-Base URL: https://blog-api-a9iq.onrender.com  
-Swagger UI: /swagger-ui.html  
-Actuator Health: /actuator/health  
+- Base URL: **https://blog-api-a9iq.onrender.com**
 
- 
+Useful deployed endpoints:
 
-**🛠 Tech Stack**
+- Swagger UI: `https://blog-api-a9iq.onrender.com/swagger-ui.html`
+- OpenAPI JSON: `https://blog-api-a9iq.onrender.com/v3/api-docs`
+- Health: `https://blog-api-a9iq.onrender.com/actuator/health`
 
+## Why this project matters
 
-Java 21  
-Spring Boot  
-Spring Security + JWT  
-Spring Data JPA  
-PostgreSQL (Production)  
-H2 Database (Development)  
-Docker  
-Maven  
-Spring Mail
-Render (Deployment)  
+This project is designed to show practical backend engineering skills, not just CRUD:
 
- 
+- Secure user authentication with JWT.
+- Role-based and ownership-based authorization.
+- Clean architecture (Controller → Service → Repository).
+- DTO-based API boundaries.
+- Pagination-ready endpoints.
+- Global exception handling.
+- Environment-aware configuration (`dev` / `prod`).
+- Dockerized deployment path.
 
-**🧱 Architecture**
+---
 
+## Tech Stack
 
-Controller → Service → Repository pattern  
-DTO-based request/response layer  
-Global exception handling  
-Role-based authorization (USER / ADMIN)  
-Environment-based configuration (dev / prod)  
+- **Java 21**
+- **Spring Boot**
+- **Spring Security + JWT**
+- **Spring Data JPA**
+- **PostgreSQL** (production)
+- **H2** (development)
+- **Spring Mail**
+- **Springdoc OpenAPI / Swagger UI**
+- **Maven**
+- **Docker**
 
- 
+---
 
-**🔐 Authentication & Authorization**
+## Architecture
 
+```text
+Controller  ->  Service  ->  Repository  ->  Database
+   |              |             |
+ HTTP/API      Business      Data access
+ contracts      rules         + queries
+```
 
-**Roles:**
+### Layer responsibilities
 
-ROLE_USER  
-ROLE_ADMIN  
+- **Controller**: request mapping, validation entry, HTTP response.
+- **Service**: business logic, authorization decisions, orchestration.
+- **Repository**: persistence and query operations.
+- **Mapper/DTO**: separates API contract from internal entities.
 
-**Security Features:**
+---
 
-JWT-based authentication  
-Password encryption (BCrypt)  
-Method-level authorization  
-Ownership-based access control  
+## Security Model
 
- 
+### Authentication
 
-**👤 User Features**
+- Login returns a JWT.
+- Protected endpoints require:
 
+```http
+Authorization: Bearer <token>
+```
 
-**Public :**
+### Authorization
 
-Register  
-Login  
+- Roles:
+  - `ROLE_USER`
+  - `ROLE_ADMIN`
+- Access is enforced by both:
+  - Route security configuration.
+  - Ownership checks in business logic (e.g., edit/delete own content).
 
-**Authenticated User**
+---
 
-Get profile (/users/me)  
-Update profile  
-Delete account  
+## Feature Overview
 
-**Admin**
+### Users
 
-Get all users (pagination)  
-Get user by ID  
-Delete user by ID  
+- Register account
+- Login
+- Read/update/delete own profile (`/users/me`)
+- Admin-only user management endpoints
 
- 
+### Posts
 
-**📝 Post Features**
+- Create post
+- Read single/all posts
+- Update/delete own post
+- Read own posts (`/post/me/page`, `/post/me/list`)
+- Pagination support
 
+### Comments
 
-**Public**
+- Create comment on a post
+- Read comments by post
+- Update/delete own comment
+- Pagination support
 
-Get all posts (pagination)  
-Get post by ID  
-Get posts by user ID  
+### Likes
 
-**Authenticated User**
+- Like/unlike posts
+- Like/unlike comments
+- One-like-per-user-per-entity behavior
 
-Create post  
-Update own post  
-Delete own post  
-Get own posts (/posts/me)  
+---
 
-**Admin** 
+## API Documentation
 
-Full access to all posts  
+When the app is running:
 
- 
+- Swagger UI: `/swagger-ui.html`
+- OpenAPI JSON: `/v3/api-docs`
+- Health endpoint: `/actuator/health`
 
-**💬 Comment Features**
+---
 
+## Local Development
 
-**Public**
+### 1) Prerequisites
 
-Get comments by post ID  
+- Java 21
+- Maven 3.9+
 
-**Authenticated User**
+### 2) Run with default profile (`dev`)
 
-Create comment  
-Update own comment  
-Delete own comment  
+```bash
+./mvnw spring-boot:run
+```
 
-**Admin**
+By default, the app uses in-memory H2 from `application-dev.properties`.
 
-Moderate all comments  
+### 3) Run tests
 
- 
+```bash
+./mvnw test
+```
 
-**❤️ Like System**
+---
 
+## Environment Variables
 
-Users can like posts  
-Users can like comments  
-One like per user per entity  
-Toggle like/unlike system  
+Set these for production profile:
 
- 
+- `SPRING_PROFILES_ACTIVE=prod`
+- `DB_URL`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+- `JWT_SECRET`
+- `JWT_DURATION`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+- `MAIL_USERNAME`
+- `MAIL_PASSWORD`
 
-**📦 Pagination & Filtering**
+---
 
+## Docker
 
-Pageable support for:  
+Build image:
 
-Users  
-Posts  
-Sorting enabled  
-Scalable query structure  
+```bash
+docker build -t blog-api .
+```
 
- 
+Run container:
 
-**⚙️ Environment Variables**
+```bash
+docker run -p 8080:8080 blog-api
+```
 
+---
 
-Required: 
+## Recruiter Notes (Project Intent)
 
-SPRING_PROFILES_ACTIVE=prod  
+This project intentionally demonstrates:
 
-DB_URL=jdbc:postgresql://...  
+- backend API design with layered architecture,
+- authentication and access control,
+- practical validation and exception patterns,
+- environment-based configuration for deployment,
+- maintainable structure for feature growth.
 
-DB_USERNAME=...  
+If you want a guided walkthrough, start from:
 
-DB_PASSWORD=...  
+1. `SecurityConfig` + `JwtFilter` + `JwtUtil` (security flow)
+2. `UserService`, `PostService`, `CommentService` (business rules)
+3. `GlobalExceptionHandler` (error contract)
 
-JWT_SECRET=your-secret  
+---
 
-JWT_DURATION= 
+## Next planned improvements
 
-ADMIN_EMAIL=... 
+- Add comprehensive unit/integration test coverage.
+- Add CI pipeline (build + tests).
+- Add DB migrations (Flyway).
+- Add API examples collection (Postman).
 
-ADMIN_PASSWORD=... 
-
- 
-
-**🐳 Docker Deployment**
-
-
-Build image: 
-
-docker build -t blog-api . 
-Run container: 
-docker run -p 8080:8080 blog-api 
-
- 
-
-**🌍 Deployment Flow (Render)**
-
-
-Push code to GitHub  
-Connect repository to Render  
-Set environment variables  
-Select Docker deployment  
-Deploy service  
-
- 
-
-**🧪 Testing**
-
-
-Use Postman or Swagger: 
-
-/auth/register  
-/auth/login  
-JWT token required for protected routes  
-
- 
-
-**📊 Monitoring**
-
-
-Spring Boot Actuator enabled  
-Health check: /actuator/health  
-Metrics: /actuator/metrics  
-
- 
-
-**🔥 Key Engineering Features**
-
-
-Clean layered architecture  
-Authorization service abstraction  
-Role-based access control  
-Ownership-based security  
-Environment separation (dev/prod)  
-Dockerized deployment  
-Production-ready configuration  
-
- 
-
-**🚀 Future Improvements**
-
-
-Redis caching  
-Event-driven architecture (Kafka/RabbitMQ)  
-File upload system (images for posts)  
-CI/CD pipeline (GitHub Actions)  
-API rate limiting  
-Unit & integration test coverage  
-
- 
-
-**👨‍💻 Author**
-
-
-Built by: ISRAEL ENDA ILANIE (ME)
-Project type: Backend Engineering Portfolio (Spring Boot) 
-
- 
