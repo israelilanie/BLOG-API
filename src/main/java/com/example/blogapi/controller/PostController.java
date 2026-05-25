@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -37,9 +39,9 @@ public class PostController {
             @ApiResponse(responseCode = "201", description = "Post created"),
             @ApiResponse(responseCode = "404",description = "User not found")}
     )
-    @PostMapping
-    public ResponseEntity<PostResponseDTO> createPost(@AuthenticationPrincipal User user , @RequestBody @Valid PostRequestDTO postRequestDTO) {
-        PostResponseDTO postResponseDTO = postService.createPost(user,postRequestDTO);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<PostResponseDTO> createPost(@AuthenticationPrincipal User user , @RequestParam String title, @RequestParam String slug, @RequestParam String content, @RequestParam boolean published, @RequestParam(required = false) MultipartFile image) {
+            PostResponseDTO postResponseDTO = postService.createPost(user,title,content,slug,published,image);
         return  ResponseEntity.status(HttpStatus.CREATED).body(postResponseDTO);
     }
 

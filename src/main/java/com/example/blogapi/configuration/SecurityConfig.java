@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 .requestMatchers("/users/register",
                                         "/http://localhost:5173",
                                         "/http://localhost:5173/**",
+                                        "/images/**",
                                         "/users/login",
                                         "/v3/api-docs",
                                         "/v3/api-docs/**",

@@ -15,4 +15,6 @@ public class PostResponseDTO {
     private String content;
     private UserSummaryDTO author;
     private long likeCount;
+    private String imageUrl;
+    private boolean isPublished;
 }

@@ -10,11 +10,14 @@ import com.example.blogapi.model.Post;
 import com.example.blogapi.model.User;
 import com.example.blogapi.repository.PostRepo;
 import com.example.blogapi.repository.UserRepo;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,12 +31,28 @@ public class PostService {
     private final PostMapper postMapper;
     private final AuthorizationService authorizationService;
     private final UserRepo userRepo;
+    private final FileService fileService;
 
-    public PostResponseDTO createPost(User currentUser, PostRequestDTO postRequestDTO){
+    public PostResponseDTO createPost(User currentUser,String title, String content,String slug, boolean published, MultipartFile image){
+
+        PostRequestDTO postRequestDTO = new PostRequestDTO();
+        postRequestDTO.setTitle(title);
+        postRequestDTO.setContent(content);
+        postRequestDTO.setSlug(slug);
+        postRequestDTO.setPublished(published);
 
         User user = userRepo.findById(currentUser.getId()).orElseThrow(()-> new ResourceNotFoundException("User", currentUser.getId()));
         Post post = postMapper.post(postRequestDTO);
         post.setAuthor(user);
+
+        if(image != null && !image.isEmpty()) {
+
+            String filename =
+                    fileService.upload(image);
+
+            post.setImageName(filename);
+        }
+
         Post post1 = postRepo.save(post);
         long count = 0L;
 

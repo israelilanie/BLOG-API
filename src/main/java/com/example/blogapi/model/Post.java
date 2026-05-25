@@ -49,4 +49,6 @@ public class Post {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    private String imageName;
 }

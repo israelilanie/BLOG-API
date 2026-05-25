@@ -22,6 +22,13 @@ public class PostMapper {
         postResponseDTO.setId(post.getId());
         postResponseDTO.setTitle(post.getTitle());
         postResponseDTO.setContent(post.getContent());
+        postResponseDTO.setPublished(post.getPublished());
+
+        if(post.getImageName() != null){
+            postResponseDTO.setImageUrl( "http://localhost:8080/images/"
+                    + post.getImageName());
+        }
+
 
         if (post.getAuthor() != null) {
             UserSummaryDTO user = new UserSummaryDTO();
