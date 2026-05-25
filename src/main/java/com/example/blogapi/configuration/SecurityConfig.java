@@ -1,8 +1,9 @@
 package com.example.blogapi.configuration;
 
 import com.example.blogapi.security.JwtFilter;
-import com.example.blogapi.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -18,13 +19,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    JwtFilter jwtFilter;
+
+
+    private final JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -39,6 +40,8 @@ public class SecurityConfig {
                         .authorizeHttpRequests(auth->auth
                                 .requestMatchers("/actuator/**").hasRole("ADMIN")
                                 .requestMatchers("/users/register",
+                                        "/http://localhost:5173",
+                                        "/http://localhost:5173/**",
                                         "/users/login",
                                         "/v3/api-docs",
                                         "/v3/api-docs/**",
